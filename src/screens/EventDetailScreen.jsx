@@ -111,7 +111,8 @@ export function EventDetailScreen({ event, onBack, onCheckout, onOpenOrganizer, 
     <div style={{ position: 'relative', width: '100%', height: '100%', background: T.bg1, overflow: 'hidden' }}>
       <div style={{ position: 'absolute', inset: 0, overflow: 'auto', paddingBottom: 120 }}>
         <div style={{
-          position: 'relative', width: '100%', height: 420,
+          position: 'relative', width: '100%',
+          aspectRatio: '4 / 5',
           overflow: 'hidden',
         }}>
           <div style={{
@@ -221,7 +222,7 @@ export function EventDetailScreen({ event, onBack, onCheckout, onOpenOrganizer, 
           }}>
             <Icon name="shield" size={18} color={T.success} />
             <div style={{ flex: 1 }}>
-              <div style={{ fontFamily: T.font, fontWeight: 700, fontSize: 13, color: '#fff' }}>Plată securizată prin 2nite</div>
+              <div style={{ fontFamily: T.font, fontWeight: 700, fontSize: 13, color: '#fff' }}>Plată securizată prin Stripe</div>
               <div style={{ fontFamily: T.fontInter, fontSize: 12, color: T.fg3 }}>Returnări gestionate de organizator în caz de anulare.</div>
             </div>
           </div>

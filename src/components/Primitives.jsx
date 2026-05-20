@@ -1,20 +1,21 @@
 import { T } from '../theme';
 import { Icon } from './Icon';
 
-export function Button({ children, variant = 'primary', size = 'md', icon, shape = 'pill', onClick, style = {}, fullWidth }) {
+export function Button({ children, variant = 'primary', size = 'md', icon, shape = 'pill', onClick, style = {}, fullWidth, disabled }) {
   const base = {
     fontFamily: T.font,
     fontWeight: 700,
     letterSpacing: '-0.01em',
     border: 0,
-    cursor: 'pointer',
+    cursor: disabled ? 'not-allowed' : 'pointer',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
     borderRadius: shape === 'pill' ? 999 : 12,
-    transition: 'all 120ms cubic-bezier(0.2,0,0,1)',
+    transition: 'transform 180ms cubic-bezier(0.2,0,0,1), background 220ms, box-shadow 220ms, color 220ms, border-color 220ms, opacity 220ms',
     width: fullWidth ? '100%' : undefined,
+    opacity: disabled ? 0.5 : 1,
   };
   const sizes = {
     sm: { fontSize: 13, padding: '10px 16px', height: 38 },
@@ -22,14 +23,31 @@ export function Button({ children, variant = 'primary', size = 'md', icon, shape
     lg: { fontSize: 17, padding: '18px 28px', height: 60 },
   };
   const variants = {
-    primary: { background: T.brand, color: '#fff' },
-    secondary: { background: 'transparent', color: '#fff', border: `1px solid ${T.borderStrong}` },
+    primary: {
+      background: `linear-gradient(180deg, ${T.brand}, ${T.brandSoft})`,
+      color: '#fff',
+      boxShadow: '0 12px 28px rgba(91,30,220,0.4), inset 0 1px 0 rgba(255,255,255,0.18)',
+    },
+    secondary: {
+      background: 'rgba(255,255,255,0.02)',
+      color: '#fff',
+      border: `1px solid ${T.borderStrong}`,
+    },
     ghost: { background: 'transparent', color: '#fff' },
-    danger: { background: T.error, color: '#fff' },
-    soft: { background: 'rgba(167,123,255,0.14)', color: T.brandGlow, border: '1px solid rgba(167,123,255,0.25)' },
+    danger: {
+      background: `linear-gradient(180deg, ${T.error}, #DC2626)`,
+      color: '#fff',
+      boxShadow: '0 12px 28px rgba(239,68,68,0.32)',
+    },
+    soft: {
+      background: 'rgba(167,123,255,0.14)',
+      color: T.brandGlow,
+      border: '1px solid rgba(167,123,255,0.25)',
+    },
   };
   return (
-    <button onClick={onClick} style={{ ...base, ...sizes[size], ...variants[variant], ...style }}>
+    <button onClick={disabled ? undefined : onClick} className="press" disabled={disabled}
+      style={{ ...base, ...sizes[size], ...variants[variant], ...style }}>
       {icon && <Icon name={icon} size={size === 'sm' ? 14 : 18} />}
       {children}
     </button>
@@ -61,14 +79,20 @@ export function Badge({ children, kind = 'brand' }) {
 
 export function Chip({ children, active, icon, onClick }) {
   return (
-    <button onClick={onClick} style={{
+    <button onClick={onClick} className="press" style={{
       fontFamily: T.font, fontWeight: active ? 700 : 500, fontSize: 13,
       padding: '8px 14px', borderRadius: 999,
       border: active ? `1px solid ${T.brand}` : `1px solid ${T.borderStrong}`,
-      background: active ? T.brand : 'transparent', color: '#fff',
+      background: active
+        ? `linear-gradient(180deg, ${T.brand}, ${T.brandSoft})`
+        : 'rgba(255,255,255,0.02)',
+      color: '#fff',
       display: 'inline-flex', alignItems: 'center', gap: 6, cursor: 'pointer',
       whiteSpace: 'nowrap',
-      transition: 'all 120ms',
+      boxShadow: active
+        ? '0 6px 18px rgba(91,30,220,0.34), inset 0 1px 0 rgba(255,255,255,0.16)'
+        : 'none',
+      transition: 'transform 160ms cubic-bezier(0.2,0,0,1), background 240ms, box-shadow 240ms, border-color 240ms',
     }}>
       {children}
       {icon && <Icon name={icon} size={13} />}
@@ -78,30 +102,36 @@ export function Chip({ children, active, icon, onClick }) {
 
 export function Input({ label, value, placeholder, type = 'text', error, helper, onChange, leading, trailing }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
       {label && (
-        <label style={{ fontFamily: T.font, fontWeight: 500, fontSize: 13, color: '#fff' }}>{label}</label>
+        <label style={{
+          fontFamily: T.fontInter, fontWeight: 600, fontSize: 11,
+          color: T.fg3, letterSpacing: '0.04em', textTransform: 'uppercase',
+        }}>{label}</label>
       )}
       <div style={{
-        display: 'flex', alignItems: 'center', gap: 10,
-        borderRadius: 10, padding: '14px 16px',
+        display: 'flex', alignItems: 'center', gap: 8,
+        borderRadius: 10, padding: '12px 14px',
         border: `1px solid ${error ? T.error : T.borderStrong}`,
         background: value ? 'linear-gradient(#27272A, #3F3F46)' : 'transparent',
         color: value ? '#fff' : T.fg3,
-        fontFamily: T.fontInter, fontSize: 15,
+        fontFamily: T.fontInter, fontSize: 14,
+        minWidth: 0,
+        transition: 'border-color 160ms cubic-bezier(0.2,0,0,1)',
       }}>
-        {leading && <Icon name={leading} size={18} color={T.fg3} />}
+        {leading && <Icon name={leading} size={16} color={T.fg3} />}
         <input
           type={type}
           value={value || ''}
           placeholder={placeholder}
           onChange={onChange}
           style={{
-            flex: 1, background: 'transparent', border: 0, outline: 'none',
+            flex: 1, minWidth: 0,
+            background: 'transparent', border: 0, outline: 'none',
             color: 'inherit', fontFamily: 'inherit', fontSize: 'inherit',
           }}
         />
-        {trailing && <Icon name={trailing} size={18} color={T.fg3} />}
+        {trailing && <Icon name={trailing} size={16} color={T.fg3} />}
       </div>
       {(helper || error) && (
         <div style={{

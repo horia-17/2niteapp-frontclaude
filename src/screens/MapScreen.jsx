@@ -80,6 +80,7 @@ export function MapScreen({ onBack, onOpenEvent }) {
   const [activeId, setActiveId] = useState(null);
   const [genre, setGenre] = useState('Toate');
   const [showList, setShowList] = useState(false);
+  const [query, setQuery] = useState('');
 
   const containerRef = useRef(null);
   const mapRef = useRef(null);
@@ -87,6 +88,7 @@ export function MapScreen({ onBack, onOpenEvent }) {
   const scrollerRef = useRef(null);
   const cardRefs = useRef({});
   const scrollSyncRef = useRef(false); // true while we're programmatically scrolling carousel
+  const touchStartRef = useRef(null);
 
   const cityName = useMemo(() => {
     const map = { bucuresti: 'București', cluj: 'Cluj-Napoca', iasi: 'Iași', timisoara: 'Timișoara', constanta: 'Constanța' };
@@ -95,15 +97,25 @@ export function MapScreen({ onBack, onOpenEvent }) {
 
   const allEvents = useMemo(() => [...EVENTS, ...SIDE_EVENTS].filter(e => e.latlng), []);
 
+  const q = query.trim().toLowerCase();
   const filtered = useMemo(() => allEvents.filter(e => {
     const cityMatch = filters.city === 'bucuresti'
       ? e.city === 'București'
       : (e.city || '').toLowerCase().includes(cityName.toLowerCase().split('-')[0]);
     const genreMatch = genre === 'Toate' || (e.genre || '').toLowerCase().includes(genre.toLowerCase());
-    return cityMatch && genreMatch;
-  }), [allEvents, filters.city, cityName, genre]);
+    const queryMatch = !q || (
+      (e.title || '').toLowerCase().includes(q) ||
+      (e.venue || '').toLowerCase().includes(q) ||
+      (e.address || '').toLowerCase().includes(q) ||
+      (e.artist || '').toLowerCase().includes(q) ||
+      (e.genre || '').toLowerCase().includes(q)
+    );
+    return cityMatch && genreMatch && queryMatch;
+  }), [allEvents, filters.city, cityName, genre, q]);
 
-  const visible = filtered.length > 0 ? filtered : allEvents.filter(e => e.city === 'București');
+  const visible = filtered.length > 0
+    ? filtered
+    : (q ? [] : allEvents.filter(e => e.city === 'București'));
 
   // --- Initialize Leaflet map once on mount ---
   useEffect(() => {
@@ -239,18 +251,32 @@ export function MapScreen({ onBack, onOpenEvent }) {
           }}><Icon name="chevronLeft" size={18} /></button>
 
           <div style={{
-            flex: 1,
+            flex: 1, minWidth: 0,
             background: 'rgba(24,24,27,0.92)', backdropFilter: 'blur(20px)',
             border: `1px solid ${T.border}`,
-            borderRadius: 999, padding: '10px 16px',
-            display: 'flex', alignItems: 'center', gap: 10,
+            borderRadius: 999, padding: '8px 14px',
+            display: 'flex', alignItems: 'center', gap: 8,
           }}>
             <Icon name="search" size={16} color={T.fg3} />
-            <span style={{
-              flex: 1,
-              fontFamily: T.fontInter, fontSize: 13, color: T.fg2,
-              whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-            }}>{cityName} · {visible.length} {visible.length === 1 ? 'eveniment' : 'evenimente'}</span>
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={`${cityName} · ${visible.length} ${visible.length === 1 ? 'eveniment' : 'evenimente'}`}
+              style={{
+                flex: 1, minWidth: 0,
+                background: 'transparent', border: 0, outline: 'none',
+                color: '#fff',
+                fontFamily: T.fontInter, fontSize: 13,
+              }}
+            />
+            {query && (
+              <button onClick={() => setQuery('')} style={{
+                background: T.bg3, border: 0, borderRadius: 999,
+                width: 20, height: 20, color: T.fg3, cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                flexShrink: 0,
+              }}><Icon name="x" size={11} /></button>
+            )}
           </div>
 
           <button onClick={() => setShowList(!showList)} className="press" style={{
@@ -360,11 +386,57 @@ export function MapScreen({ onBack, onOpenEvent }) {
         </div>
       )}
 
-      {/* Bottom carousel */}
-      {!showList && (
+      {/* Bottom: empty state when no results */}
+      {!showList && visible.length === 0 && (
         <div style={{
-          position: 'absolute', bottom: 24, left: 0, right: 0, zIndex: 1000,
+          position: 'absolute', bottom: 28, left: 16, right: 16, zIndex: 1000,
+          background: 'rgba(24,24,27,0.94)', backdropFilter: 'blur(14px)',
+          border: `1px solid ${T.border}`, borderRadius: 16,
+          padding: 16, textAlign: 'center',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
         }}>
+          <Icon name="search" size={20} color={T.fg3} />
+          <div style={{ fontFamily: T.font, fontWeight: 700, fontSize: 14, color: '#fff' }}>Niciun rezultat</div>
+          <div style={{ fontFamily: T.fontInter, fontSize: 12, color: T.fg3 }}>
+            Schimbă căutarea sau categoria.
+          </div>
+        </div>
+      )}
+
+      {/* Bottom carousel */}
+      {!showList && visible.length > 0 && (
+        <div
+          style={{
+            position: 'absolute', bottom: 16, left: 0, right: 0, zIndex: 1000,
+            paddingTop: 14,
+          }}
+          onTouchStart={(e) => { touchStartRef.current = e.touches[0].clientY; }}
+          onTouchMove={(e) => {
+            if (touchStartRef.current == null) return;
+            const dy = touchStartRef.current - e.touches[0].clientY;
+            if (dy > 60) {
+              setShowList(true);
+              touchStartRef.current = null;
+            }
+          }}
+          onTouchEnd={() => { touchStartRef.current = null; }}
+        >
+          <button
+            onClick={() => setShowList(true)}
+            aria-label="Deschide lista de evenimente"
+            style={{
+              position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
+              background: 'rgba(24,24,27,0.85)', backdropFilter: 'blur(14px)',
+              border: `1px solid ${T.border}`,
+              borderRadius: 999, padding: '4px 12px',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
+              color: T.fg2, fontFamily: T.fontInter, fontWeight: 600, fontSize: 10,
+              letterSpacing: '0.06em', textTransform: 'uppercase',
+            }}
+          >
+            <div style={{ width: 28, height: 3, borderRadius: 999, background: T.fg4 }} />
+            Trage în sus pentru listă
+          </button>
           <div
             ref={scrollerRef}
             onScroll={handleCarouselScroll}

@@ -9,30 +9,56 @@ export function BottomNav({ active, onChange }) {
     { id: 'saved', label: 'Salvate', icon: 'heart' },
     { id: 'account', label: 'Cont', icon: 'user' },
   ];
+  const activeIdx = Math.max(0, tabs.findIndex(t => t.id === active));
   return (
     <div style={{
       position: 'absolute', left: 12, right: 12, bottom: 14, zIndex: 30,
-      background: 'rgba(24,24,27,0.88)', backdropFilter: 'blur(24px)',
-      border: `1px solid ${T.border}`,
+      background: 'rgba(20,20,24,0.78)', backdropFilter: 'blur(28px) saturate(1.4)',
+      WebkitBackdropFilter: 'blur(28px) saturate(1.4)',
+      border: `1px solid rgba(255,255,255,0.08)`,
+      boxShadow: '0 18px 40px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.04)',
       borderRadius: 24,
       padding: 6,
       display: 'flex', gap: 2,
+      position: 'absolute',
     }}>
+      {/* Sliding active indicator */}
+      <div aria-hidden style={{
+        position: 'absolute',
+        top: 6, bottom: 6,
+        left: `calc(6px + ${activeIdx} * ((100% - 12px) / ${tabs.length}))`,
+        width: `calc((100% - 12px) / ${tabs.length})`,
+        background: `linear-gradient(180deg, ${T.brand}, ${T.brandSoft})`,
+        borderRadius: 18,
+        boxShadow: '0 8px 20px rgba(91,30,220,0.45), inset 0 1px 0 rgba(255,255,255,0.18)',
+        transition: 'left 360ms cubic-bezier(0.2,0,0,1), background 240ms',
+      }} />
+
       {tabs.map(t => {
         const isActive = t.id === active;
         return (
-          <button key={t.id} onClick={() => onChange?.(t.id)} style={{
+          <button key={t.id} onClick={() => onChange?.(t.id)} aria-label={t.label} aria-pressed={isActive} style={{
+            position: 'relative', zIndex: 1,
             flex: 1, border: 0,
-            background: isActive ? T.brand : 'transparent',
+            background: 'transparent',
             color: isActive ? '#fff' : T.fg3,
             borderRadius: 18, padding: '10px 4px',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
             cursor: 'pointer',
+            transition: 'color 200ms cubic-bezier(0.2,0,0,1)',
           }}>
-            <Icon name={t.icon} size={20} />
+            <span style={{
+              display: 'inline-flex',
+              transform: isActive ? 'translateY(-1px) scale(1.06)' : 'translateY(0) scale(1)',
+              transition: 'transform 280ms cubic-bezier(0.2,0,0,1)',
+            }}>
+              <Icon name={t.icon} size={19} />
+            </span>
             <span style={{
               fontFamily: T.font, fontWeight: isActive ? 700 : 500, fontSize: 10,
               letterSpacing: '-0.01em',
+              opacity: isActive ? 1 : 0.85,
+              transition: 'opacity 200ms',
             }}>{t.label}</span>
           </button>
         );

@@ -26,18 +26,27 @@ const ORGANIZERS = {
     bio: 'Cele mai tari evenimente din București. House · Techno · Trap. Casa creativă a scenei locale.',
     followers: '12.353', events: '47', rating: 4.8, image: ASSETS.lalaParty,
     eventIds: ['lala', 'matter', 'fl1', 'fl3'],
+    instagram: 'https://instagram.com/2nite.ro',
+    tiktok: 'https://tiktok.com/@2nite.ro',
+    website: 'https://2nite.ro',
   },
   'MATTER': {
     name: 'MATTER', handle: '@matter.bucharest',
     bio: 'Underground techno collective. Open weekends 22:00 → 06:00. Doors policy: no phones on floor.',
     followers: '8.214', events: '32', rating: 4.7, image: ASSETS.night2,
     eventIds: ['matter', 'fl1', 'fl2'],
+    instagram: 'https://instagram.com/matter.bucharest',
+    tiktok: 'https://tiktok.com/@matter.bucharest',
+    website: 'https://matter.club',
   },
   'Beach Please': {
     name: 'Beach Please', handle: '@beachplease',
     bio: 'Cel mai mare festival de pe litoral. 3 nopți, 3 scene, peste 30 de artiști.',
     followers: '54.001', events: '12', rating: 4.9, image: ASSETS.search,
     eventIds: ['beach', 'fl4'],
+    instagram: 'https://instagram.com/beachpleasefestival',
+    tiktok: 'https://tiktok.com/@beachplease',
+    website: 'https://beachplease.ro',
   },
 };
 
@@ -115,7 +124,7 @@ export function OrganizerScreen({ organizer, onBack, onOpenEvent, onShare }) {
             <Stat value={`★ ${org.rating}`} label="Rating" />
           </div>
 
-          <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
+          <div style={{ display: 'flex', gap: 8, marginTop: 14, alignItems: 'center' }}>
             <button onClick={() => { toggleFollow(org.name); showToast(isFollowing ? 'Nu mai urmărești' : 'Acum urmărești'); }} className="press" style={{
               flex: 1, cursor: 'pointer',
               borderRadius: 999, padding: '13px 18px',
@@ -129,12 +138,37 @@ export function OrganizerScreen({ organizer, onBack, onOpenEvent, onShare }) {
             }}>
               {isFollowing ? <><Icon name="check" size={14} /> Urmărești</> : <>Urmărește</>}
             </button>
-            <button onClick={() => showToast('Mesageria deschisă curând')} className="press" style={{
-              flex: 1, borderRadius: 999, padding: '13px 18px', cursor: 'pointer',
-              background: 'transparent', color: '#fff',
-              border: `1px solid ${T.borderStrong}`,
-              fontFamily: T.font, fontWeight: 600, fontSize: 14,
-            }}>Mesaj</button>
+
+            {org.instagram && (
+              <a href={org.instagram} target="_blank" rel="noreferrer" aria-label="Instagram"
+                onClick={(e) => { e.preventDefault(); showToast('Se deschide Instagram'); }}
+                className="press" style={{
+                width: 42, height: 42, borderRadius: 999, flexShrink: 0,
+                background: T.bg2, border: `1px solid ${T.borderStrong}`, color: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', textDecoration: 'none',
+              }}><Icon name="instagram" size={16} /></a>
+            )}
+            {org.tiktok && (
+              <a href={org.tiktok} target="_blank" rel="noreferrer" aria-label="TikTok"
+                onClick={(e) => { e.preventDefault(); showToast('Se deschide TikTok'); }}
+                className="press" style={{
+                width: 42, height: 42, borderRadius: 999, flexShrink: 0,
+                background: T.bg2, border: `1px solid ${T.borderStrong}`, color: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', textDecoration: 'none',
+              }}><Icon name="tiktok" size={16} /></a>
+            )}
+            {org.website && (
+              <a href={org.website} target="_blank" rel="noreferrer" aria-label="Website"
+                onClick={(e) => { e.preventDefault(); showToast(`Se deschide ${org.website.replace(/^https?:\/\//, '')}`); }}
+                className="press" style={{
+                width: 42, height: 42, borderRadius: 999, flexShrink: 0,
+                background: T.bg2, border: `1px solid ${T.borderStrong}`, color: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', textDecoration: 'none',
+              }}><Icon name="globe" size={16} /></a>
+            )}
           </div>
         </div>
 

@@ -11,6 +11,7 @@ const STEPS = [
 ];
 
 const CITIES = ['București', 'Cluj-Napoca', 'Iași', 'Timișoara', 'Constanța', 'Brașov', 'Sibiu', 'Oradea'];
+const SECTORS = ['Sector 1', 'Sector 2', 'Sector 3', 'Sector 4', 'Sector 5', 'Sector 6'];
 
 const formatCard = (v) => v.replace(/\D/g, '').slice(0, 19).replace(/(.{4})/g, '$1 ').trim();
 const formatExp = (v) => {
@@ -43,9 +44,13 @@ function FormGroup({ label, sub, children }) {
   );
 }
 
-function Row({ children, cols = 2 }) {
+function Row({ children, cols = 2, template }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 10 }}>
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: template || `repeat(${cols}, 1fr)`,
+      gap: 10, minWidth: 0,
+    }}>
       {children}
     </div>
   );
@@ -54,20 +59,29 @@ function Row({ children, cols = 2 }) {
 function Select({ label, value, options, onChange, leading }) {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, position: 'relative' }}>
-      {label && <label style={{ fontFamily: T.font, fontWeight: 500, fontSize: 13, color: '#fff' }}>{label}</label>}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, position: 'relative', minWidth: 0 }}>
+      {label && <label style={{
+        fontFamily: T.fontInter, fontWeight: 600, fontSize: 11,
+        color: T.fg3, letterSpacing: '0.04em', textTransform: 'uppercase',
+      }}>{label}</label>}
       <button type="button" onClick={() => setOpen(!open)} style={{
-        display: 'flex', alignItems: 'center', gap: 10,
-        borderRadius: 10, padding: '14px 16px',
+        display: 'flex', alignItems: 'center', gap: 8,
+        borderRadius: 10, padding: '12px 14px',
         border: `1px solid ${T.borderStrong}`,
         background: value ? 'linear-gradient(#27272A, #3F3F46)' : 'transparent',
         color: value ? '#fff' : T.fg3,
-        fontFamily: T.fontInter, fontSize: 15,
+        fontFamily: T.fontInter, fontSize: 14,
         cursor: 'pointer', textAlign: 'left',
+        transition: 'border-color 160ms cubic-bezier(0.2,0,0,1)',
       }}>
-        {leading && <Icon name={leading} size={18} color={T.fg3} />}
-        <span style={{ flex: 1 }}>{value || 'Alege…'}</span>
-        <Icon name={open ? 'chevronDown' : 'chevronDown'} size={16} color={T.fg3} />
+        {leading && <Icon name={leading} size={16} color={T.fg3} />}
+        <span style={{ flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{value || 'Alege…'}</span>
+        <span style={{
+          display: 'inline-flex', transition: 'transform 200ms',
+          transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+        }}>
+          <Icon name="chevronDown" size={14} color={T.fg3} />
+        </span>
       </button>
       {open && (
         <div style={{
@@ -235,13 +249,28 @@ function ContactStep({ contact, setContact }) {
         </Row>
       </FormGroup>
 
-      <FormGroup label="Oraș">
+      <FormGroup label="Adresă" sub="Folosită pentru livrarea biletelor și facturare implicită.">
         <Select
           label="Oraș de reședință"
           leading="mapPin"
           value={contact.city}
           options={CITIES}
-          onChange={(city) => setContact({ ...contact, city })}
+          onChange={(city) => setContact({ ...contact, city, sector: city === 'București' ? (contact.sector || SECTORS[0]) : '' })}
+        />
+        {contact.city === 'București' && (
+          <Select
+            label="Sector"
+            value={contact.sector}
+            options={SECTORS}
+            onChange={(sector) => setContact({ ...contact, sector })}
+          />
+        )}
+        <Input
+          label="Adresă exactă"
+          value={contact.address}
+          placeholder="Strada, număr, bloc, scară, ap."
+          leading="building"
+          onChange={(e) => setContact({ ...contact, address: e.target.value })}
         />
       </FormGroup>
 
@@ -350,7 +379,7 @@ function PaymentStep({ payment, setPayment, card, setCard, savedCards, useSaved,
                 leading="card"
                 onChange={(e) => setCard({ ...card, number: formatCard(e.target.value) })}
               />
-              <Row>
+              <Row template="3fr 2fr">
                 <Input
                   label="Expirare"
                   value={card.exp}
@@ -382,7 +411,7 @@ function PaymentStep({ payment, setPayment, card, setCard, savedCards, useSaved,
       }}>
         <Icon name="shield" size={16} color={T.success} />
         <div style={{ fontFamily: T.fontInter, fontSize: 12, color: T.fg2, lineHeight: 1.5 }}>
-          Plată procesată securizat prin 2nite. CVC-ul nu este stocat.
+          Plată procesată securizat prin Stripe. CVC-ul nu este stocat.
         </div>
       </div>
     </div>
@@ -572,6 +601,8 @@ export function CheckoutScreen({ onBack, onDone, onOpenTickets }) {
     email: 'horia@2nite.ro',
     phone: '0721 234 567',
     city: 'București',
+    sector: 'Sector 1',
+    address: '',
   });
   const [payment, setPayment] = useState('apple');
   const [card, setCard] = useState({ number: '', exp: '', cvc: '', holder: '' });
@@ -606,9 +637,15 @@ export function CheckoutScreen({ onBack, onDone, onOpenTickets }) {
   const fees = { platform: Math.max(2, Math.round(subtotal * 0.04)), processing: 1 };
   const total = subtotal + fees.platform + fees.processing;
 
-  const validContact = useMemo(() =>
-    contact.name.trim() && /\S+@\S+\.\S+/.test(contact.email) && contact.phone.trim().length >= 6 && contact.city
-  , [contact]);
+  const validContact = useMemo(() => {
+    if (!contact.name.trim()) return false;
+    if (!/\S+@\S+\.\S+/.test(contact.email)) return false;
+    if (contact.phone.trim().length < 6) return false;
+    if (!contact.city) return false;
+    if (contact.city === 'București' && !contact.sector) return false;
+    if (!contact.address.trim()) return false;
+    return true;
+  }, [contact]);
 
   const validPayment = useMemo(() => {
     if (payment !== 'card') return true;

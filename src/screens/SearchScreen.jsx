@@ -39,7 +39,7 @@ export function SearchScreen({ onClose, onOpenEvent, initialQuery = '' }) {
     }}>
       <div style={{ padding: '52px 16px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
         <div style={{
-          flex: 1,
+          flex: 1, minWidth: 0,
           display: 'flex', alignItems: 'center', gap: 10,
           background: T.bg2, border: `1px solid ${T.borderStrong}`,
           borderRadius: 14, padding: '12px 14px',
@@ -51,7 +51,8 @@ export function SearchScreen({ onClose, onOpenEvent, initialQuery = '' }) {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Caută evenimente, locații, artiști…"
             style={{
-              flex: 1, background: 'transparent', border: 0, outline: 'none',
+              flex: 1, minWidth: 0,
+              background: 'transparent', border: 0, outline: 'none',
               color: '#fff',
               fontFamily: T.fontInter, fontSize: 14,
             }}
@@ -61,13 +62,14 @@ export function SearchScreen({ onClose, onOpenEvent, initialQuery = '' }) {
               background: T.bg3, border: 0, borderRadius: 999,
               width: 22, height: 22, color: T.fg3, cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
             }}><Icon name="x" size={12} /></button>
           )}
         </div>
         <button onClick={onClose} style={{
-          background: 'transparent', border: 0, padding: '0 6px',
-          fontFamily: T.font, fontWeight: 600, fontSize: 14, color: T.fg2,
-          cursor: 'pointer',
+          background: 'transparent', border: 0, padding: '6px 0',
+          fontFamily: T.font, fontWeight: 600, fontSize: 13, color: T.fg2,
+          cursor: 'pointer', flexShrink: 0, whiteSpace: 'nowrap',
         }}>Anulează</button>
       </div>
 

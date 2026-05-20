@@ -212,43 +212,73 @@ export default function App() {
   return (
     <AppProvider>
       <div style={{
-        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 32,
-        padding: '40px 24px 64px', maxWidth: '100%', minHeight: '100vh',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 36,
+        padding: 'clamp(28px, 5vw, 56px) 24px 72px',
+        maxWidth: '100%', minHeight: '100vh',
         boxSizing: 'border-box',
       }}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, textAlign: 'center', maxWidth: 520 }}>
+        <div className="fade-up" style={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+          textAlign: 'center', maxWidth: 560,
+        }}>
           <span style={{
             fontFamily: '"Inter", system-ui, sans-serif',
             fontSize: 11, color: '#A77BFF',
-            letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700,
-          }}>2nite · App</span>
+            letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 700,
+            padding: '5px 10px',
+            background: 'rgba(167,123,255,0.08)',
+            border: '1px solid rgba(167,123,255,0.2)',
+            borderRadius: 999,
+          }}>2nite · Nightlife app</span>
           <h1 style={{
             margin: 0,
             fontFamily: '"Unbounded", system-ui, sans-serif',
-            fontWeight: 800, fontSize: 30, letterSpacing: '-0.02em',
+            fontWeight: 800, fontSize: 'clamp(28px, 4vw, 40px)',
+            letterSpacing: '-0.025em',
             color: '#fff',
+            background: 'linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.72) 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
           }}>Nightlife pentru România</h1>
           <p style={{
             margin: 0,
             fontFamily: '"Inter", system-ui, sans-serif',
-            color: '#A1A1AA', fontSize: 14, lineHeight: 1.55,
+            color: '#A1A1AA', fontSize: 14, lineHeight: 1.6,
+            maxWidth: 480,
           }}>
-            Explorează aplicația — descoperă evenimente, salvează preferate, urmărește organizatori,
-            cumpără bilete cu plata securizată, apoi gestionează totul din cont.
+            Descoperă evenimente, salvează preferate, urmărește organizatori, cumpără bilete
+            cu plata securizată prin Stripe, apoi gestionează totul dintr-un singur cont.
           </p>
         </div>
 
-        <div className="device-col" style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18,
+        <div className="device-col fade-up" style={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 22,
+          position: 'relative',
         }}>
+          <div aria-hidden style={{
+            position: 'absolute', inset: '-40px -60px', zIndex: -1,
+            background: 'radial-gradient(50% 60% at 50% 50%, rgba(91,30,220,0.28), transparent 70%)',
+            filter: 'blur(40px)',
+          }} />
           <IOSDevice width={390} height={780} dark>
             <PhoneApp />
           </IOSDevice>
           <div style={{
-            fontFamily: '"Inter", system-ui, sans-serif',
-            fontSize: 12, color: '#71717A', letterSpacing: '0.04em', textAlign: 'center',
+            display: 'flex', alignItems: 'center', gap: 8,
+            padding: '8px 14px',
+            background: 'rgba(24,24,27,0.6)',
+            border: '1px solid rgba(255,255,255,0.06)',
+            borderRadius: 999,
+            backdropFilter: 'blur(10px)',
           }}>
-            Tap pe orice element. Toate flow-urile sunt funcționale — checkout, notificări, profil, hărți.
+            <span style={{
+              width: 6, height: 6, borderRadius: 999, background: '#22C55E',
+            }} className="brand-pulse" />
+            <span style={{
+              fontFamily: '"Inter", system-ui, sans-serif',
+              fontSize: 12, color: '#A1A1AA', letterSpacing: '0.02em',
+            }}>Toate flow-urile sunt complet funcționale</span>
           </div>
         </div>
       </div>

@@ -31,6 +31,8 @@ const ICONS = {
   card: 'M2 8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8Z M2 10h20 M6 15h3',
   list: 'M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01',
   navigation: 'M3 11l19-9-9 19-2-8-8-2Z',
+  instagram: 'M16 3H8a5 5 0 0 0-5 5v8a5 5 0 0 0 5 5h8a5 5 0 0 0 5-5V8a5 5 0 0 0-5-5Z M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z M17.5 6.5h.01',
+  tiktok: 'M16 8a5 5 0 0 0 5 5V8.5A4.5 4.5 0 0 1 16.5 4H13v12.5a2.5 2.5 0 1 1-2.5-2.5',
 };
 
 export function Icon({ name, size = 22, color = 'currentColor', strokeWidth = 1.75 }) {

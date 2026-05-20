@@ -80,7 +80,7 @@ function PortraitEventCard({ event, onClick }) {
   return (
     <div onClick={onClick} className="press" style={{
       position: 'relative', flexShrink: 0,
-      width: 180, height: 240,
+      width: 180, aspectRatio: '4 / 5',
       borderRadius: 16, overflow: 'hidden',
       background: T.bg2, border: `1px solid ${T.border}`,
       cursor: 'pointer',
@@ -140,7 +140,7 @@ export function EventListRow({ event, onClick }) {
       </div>
 
       <div style={{
-        width: 64, height: 64, borderRadius: 10, flexShrink: 0,
+        width: 56, height: 70, borderRadius: 10, flexShrink: 0,
         background: `url(${event.image}) center/cover, ${T.bg3}`,
       }} />
 
@@ -179,7 +179,7 @@ function EditorPickCard({ event, onClick }) {
       cursor: 'pointer',
     }}>
       <div style={{
-        height: 180,
+        width: '100%', aspectRatio: '4 / 5',
         background: `url(${event.image}) center/cover, ${T.bg3}`,
         position: 'relative',
       }}>
@@ -264,13 +264,7 @@ export function HomeScreen({ onOpenEvent, onOpenFilters, onOpenSearch, onOpenNot
             background: 'transparent', border: 0, color: '#fff', cursor: 'pointer',
             padding: 0,
           }}>
-            <span style={{
-              width: 28, height: 28, borderRadius: 999,
-              background: T.brand, color: '#fff',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontFamily: T.font, fontWeight: 800, fontSize: 11,
-              letterSpacing: '-0.02em',
-            }}>2n</span>
+            <Icon name="mapPin" size={16} color={T.brandGlow} />
             <span style={{
               fontFamily: T.font, fontWeight: 700, fontSize: 18, color: '#fff', letterSpacing: '-0.02em',
             }}>{cityLabel}</span>
@@ -462,20 +456,28 @@ export function FilterSheet({ onClose, onApply }) {
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'stretch' }}>
           <button onClick={reset} style={{
-            fontFamily: T.font, fontWeight: 600, fontSize: 14, letterSpacing: '-0.01em',
+            fontFamily: T.font, fontWeight: 600, fontSize: 13, letterSpacing: '-0.01em',
             background: 'transparent', color: '#fff',
             border: `1px solid ${T.borderStrong}`,
-            height: 50, padding: '0 22px', borderRadius: 999, cursor: 'pointer',
+            height: 50, padding: '0 18px', borderRadius: 999, cursor: 'pointer',
+            flexShrink: 0, whiteSpace: 'nowrap',
           }}>Resetează</button>
           <button onClick={apply} style={{
-            flex: 1,
-            fontFamily: T.font, fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em',
+            flex: 1, minWidth: 0,
+            fontFamily: T.font, fontWeight: 700, fontSize: 14, letterSpacing: '-0.01em',
             background: T.brand, color: '#fff', border: 0,
-            height: 50, borderRadius: 999, cursor: 'pointer',
+            height: 50, padding: '0 18px',
+            borderRadius: 999, cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+            whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
           }}>
-            Aplică · {cityCount} evenimente
+            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>Aplică</span>
+            <span style={{
+              fontFamily: T.fontInter, fontWeight: 600, fontSize: 11,
+              opacity: 0.8, flexShrink: 0,
+            }}>· {cityCount} ev.</span>
           </button>
         </div>
       </div>
