@@ -59,29 +59,23 @@ function Row({ children, cols = 2, template }) {
 function Select({ label, value, options, onChange, leading }) {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, position: 'relative', minWidth: 0 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, position: 'relative', minWidth: 0 }}>
       {label && <label style={{
-        fontFamily: T.fontInter, fontWeight: 600, fontSize: 11,
-        color: T.fg3, letterSpacing: '0.04em', textTransform: 'uppercase',
+        fontFamily: T.font, fontWeight: 500, fontSize: 13, color: '#fff',
+        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
       }}>{label}</label>}
       <button type="button" onClick={() => setOpen(!open)} style={{
-        display: 'flex', alignItems: 'center', gap: 8,
-        borderRadius: 10, padding: '12px 14px',
+        display: 'flex', alignItems: 'center', gap: 10,
+        borderRadius: 10, padding: '14px 16px',
         border: `1px solid ${T.borderStrong}`,
         background: value ? 'linear-gradient(#27272A, #3F3F46)' : 'transparent',
         color: value ? '#fff' : T.fg3,
-        fontFamily: T.fontInter, fontSize: 14,
+        fontFamily: T.fontInter, fontSize: 15,
         cursor: 'pointer', textAlign: 'left',
-        transition: 'border-color 160ms cubic-bezier(0.2,0,0,1)',
       }}>
-        {leading && <Icon name={leading} size={16} color={T.fg3} />}
+        {leading && <Icon name={leading} size={18} color={T.fg3} />}
         <span style={{ flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{value || 'Alege…'}</span>
-        <span style={{
-          display: 'inline-flex', transition: 'transform 200ms',
-          transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
-        }}>
-          <Icon name="chevronDown" size={14} color={T.fg3} />
-        </span>
+        <Icon name="chevronDown" size={16} color={T.fg3} />
       </button>
       {open && (
         <div style={{
