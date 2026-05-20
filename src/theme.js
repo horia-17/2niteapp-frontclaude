@@ -1,0 +1,25 @@
+// Design tokens mirrored from the 2nite design system for use in inline styles.
+// Mirrors colors_and_type.css; keep both in sync.
+export const T = {
+  bg1: '#121212',
+  bg2: '#18181B',
+  bg3: '#27272A',
+  bg4: '#3F3F46',
+  border: '#27272A',
+  borderStrong: '#3F3F46',
+  fg1: '#FFFFFF',
+  fg2: '#D4D4D8',
+  fg3: '#A1A1AA',
+  fg4: '#71717A',
+  brand: '#5B1EDC',
+  brandHover: '#6B2EE8',
+  brandSoft: '#8A38F5',
+  brandGlow: '#A77BFF',
+  success: '#22C55E',
+  warning: '#F59E0B',
+  error: '#EF4444',
+  info: '#016FD0',
+  font: '"Unbounded", system-ui, sans-serif',
+  fontInter: '"Inter", system-ui, sans-serif',
+  fontMono: 'ui-monospace, "SF Mono", "Roboto Mono", monospace',
+};

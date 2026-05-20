@@ -1,0 +1,239 @@
+/* ============================================================
+   2nite Design System — Tokens & Type
+   ============================================================
+   Dark-first nightlife UI. One brand accent (electric violet)
+   against a near-black surface system. Mobile-first.
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+  /* ---------- COLOR ---------- */
+
+  /* Surfaces */
+  --color-bg-1: #121212;              /* page bg */
+  --color-bg-2: #18181B;              /* card / surface */
+  --color-bg-3: #27272A;              /* elevated surface, input filled */
+  --color-bg-4: #3F3F46;              /* highest surface, slider tracks */
+
+  /* Borders */
+  --color-border-subtle: #27272A;
+  --color-border-default: #3F3F46;
+  --color-border-strong: #52525B;
+  --color-border-light: #DBDDE3;      /* for light/printed contexts */
+
+  /* Text */
+  --color-fg-1: #FFFFFF;              /* primary */
+  --color-fg-2: #D4D4D8;              /* high secondary */
+  --color-fg-3: #A1A1AA;              /* secondary */
+  --color-fg-4: #71717A;              /* muted / meta */
+  --color-fg-5: #52525B;              /* disabled */
+  --color-fg-inverse: #18181B;        /* on light surfaces */
+
+  /* Brand */
+  --color-brand: #5B1EDC;             /* primary CTA, focus */
+  --color-brand-hover: #6B2EE8;
+  --color-brand-active: #4F19C0;
+  --color-brand-soft: #8A38F5;        /* secondary accent text */
+  --color-brand-glow: #A77BFF;        /* highlights, blobs */
+  --color-brand-on: #FFFFFF;          /* text/icon on brand */
+
+  /* Semantic */
+  --color-success: #22C55E;
+  --color-success-bg: rgba(34, 197, 94, 0.12);
+  --color-warning: #F59E0B;
+  --color-warning-bg: rgba(245, 158, 11, 0.12);
+  --color-error: #EF4444;
+  --color-error-bg: rgba(239, 68, 68, 0.12);
+  --color-info: #016FD0;
+  --color-info-bg: rgba(1, 111, 208, 0.12);
+
+  /* Overlays */
+  --color-overlay-1: rgba(0, 0, 0, 0.40);
+  --color-overlay-2: rgba(0, 0, 0, 0.65);
+  --color-image-protect: linear-gradient(to top, rgba(0,0,0,.85) 0%, rgba(0,0,0,0) 60%);
+
+  /* ---------- TYPOGRAPHY ---------- */
+
+  --font-primary: "Unbounded", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-secondary: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Roboto Mono", monospace;
+
+  /* Type scale (px) */
+  --text-display-xl: 64px;
+  --text-display-lg: 48px;
+  --text-display-md: 40px;
+  --text-h1: 32px;
+  --text-h2: 24px;
+  --text-h3: 20px;
+  --text-body-lg: 18px;
+  --text-body: 16px;
+  --text-sm: 14px;
+  --text-xs: 12px;
+
+  /* Weights */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+  --weight-black: 900;
+
+  /* Line heights */
+  --leading-tight: 1.1;
+  --leading-snug: 1.25;
+  --leading-normal: 1.4;
+  --leading-relaxed: 1.5;
+
+  /* Letter spacing */
+  --tracking-tight: -0.02em;
+  --tracking-snug: -0.01em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.02em;
+
+  /* ---------- SPACING (8pt) ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 40px;
+  --space-8: 48px;
+  --space-9: 64px;
+  --space-10: 80px;
+  --space-11: 96px;
+
+  /* ---------- RADIUS ---------- */
+  --radius-sm: 6px;
+  --radius-md: 10px;       /* inputs */
+  --radius-lg: 12px;       /* cards, buttons (rect) */
+  --radius-xl: 24px;       /* large cards */
+  --radius-2xl: 40px;      /* hero image containers */
+  --radius-pill: 999px;    /* pill buttons, chips */
+
+  /* ---------- ELEVATION (dark-mode borders, no drop shadow) ---------- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.40);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.55);
+  --shadow-glow: 0 0 0 1px rgba(167, 123, 255, 0.45), 0 12px 32px rgba(91, 30, 220, 0.35);
+  --shadow-focus: 0 0 0 2px var(--color-bg-1), 0 0 0 4px var(--color-brand);
+
+  /* ---------- MOTION ---------- */
+  --motion-fast: 120ms;
+  --motion-normal: 200ms;
+  --motion-slow: 300ms;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---------- Z-INDEX ---------- */
+  --z-base: 0;
+  --z-sticky: 10;
+  --z-nav: 100;
+  --z-overlay: 500;
+  --z-modal: 800;
+  --z-toast: 900;
+  --z-tooltip: 1000;
+}
+
+/* =========================================================
+   BASE / RESET
+   ========================================================= */
+
+html, body {
+  background: var(--color-bg-1);
+  color: var(--color-fg-1);
+  font-family: var(--font-primary);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-body);
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================================================
+   SEMANTIC TYPE
+   ========================================================= */
+
+.t-display-xl, h1.t-display {
+  font-family: var(--font-primary);
+  font-weight: var(--weight-extrabold);
+  font-size: var(--text-display-xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+.t-display-lg {
+  font-family: var(--font-primary);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-display-lg);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+.t-display-md {
+  font-family: var(--font-primary);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-display-md);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-snug);
+}
+.t-h1 {
+  font-family: var(--font-primary);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-h1);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-snug);
+}
+.t-h2 {
+  font-family: var(--font-primary);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-h2);
+  line-height: var(--leading-snug);
+}
+.t-h3 {
+  font-family: var(--font-primary);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-h3);
+  line-height: var(--leading-snug);
+}
+.t-body-lg {
+  font-family: var(--font-primary);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-relaxed);
+}
+.t-body {
+  font-family: var(--font-primary);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-body);
+  line-height: var(--leading-relaxed);
+}
+.t-meta, .t-sm {
+  font-family: var(--font-secondary);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-fg-3);
+}
+.t-caption, .t-xs {
+  font-family: var(--font-secondary);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-xs);
+  line-height: var(--leading-relaxed);
+  color: var(--color-fg-4);
+}
+.t-eyebrow {
+  font-family: var(--font-secondary);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-brand-soft);
+}
+.t-button {
+  font-family: var(--font-primary);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-body);
+  line-height: 1;
+  letter-spacing: var(--tracking-snug);
+}
